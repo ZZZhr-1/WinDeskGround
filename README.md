@@ -1,46 +1,70 @@
-# MultiWindows Benchmark for GUI Grounding
+<div align="center">
 
-A reproducible benchmark toolkit for evaluating GUI grounding models under multi-window scenes.
+# MultiWindows: GUI Grounding Benchmark in Multi-Window Scenes
 
-This repository provides:
-- controlled data generation for sensitivity analysis
-- difficulty-level simulation tasks (L1-L5)
-- unified multi-model evaluation scripts
-- result summarization utilities
+<p>
+Controlled data generation, difficulty-level simulation, and unified evaluation for desktop GUI grounding.
+</p>
 
-## Highlights
+<p>
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#benchmark-at-a-glance">Results</a> •
+  <a href="#visual-overview">Visual Overview</a> •
+  <a href="#reproducibility">Reproducibility</a>
+</p>
 
-- Controlled experiment axes: occlusion, semantic distraction, clutter
-- Difficulty curriculum: L1 to L5 simulation levels
-- Unified evaluation pipeline for local/API models
-- Batch command generation for parallel GPU execution
+</div>
 
-## Project Structure
+![Pipeline](assets/figure_pipeline.png)
 
-```text
-.
-├── run_benchmark_complete.sh          # End-to-end pipeline
-├── eval/
-│   ├── evaluate_model.py              # Evaluate one model on one test set
-│   ├── generate_commands.py           # Generate evaluation job commands
-│   ├── summarize_benchmark.py         # Aggregate results into tables
-│   ├── models.py                      # Model adapters
-│   └── utils.py                       # Output parsing helpers
-├── sensitivity_analysis/
-│   ├── experiment_generator.py        # Sensitivity dataset generation
-│   ├── controlled_analysis.py         # Controlled-condition analysis
-│   ├── slicing_analysis.py            # Slicing analysis
-│   └── run_experiments.sh
-└── simulation/dataset_generator/
-    ├── run.py                         # Difficulty-level dataset generation
-    ├── generator.py                   # Core sample generation
-    ├── config.py                      # Difficulty configs
-    └── README.md
-```
+## Overview
+
+MultiWindows is a reproducible benchmark toolkit for evaluating GUI grounding models in realistic multi-window desktop environments.
+
+It includes:
+- sensitivity-controlled experiments for occlusion, semantic distraction, and clutter
+- simulation difficulty levels from L1 to L5
+- unified evaluation scripts for multiple local or API-based models
+- automatic summary tables for cross-model comparison
+
+## Benchmark At A Glance
+
+Source: eval_outputs/benchmark_pivot.csv
+
+### Key Numbers
+
+| Setting | Best Accuracy | Best Model |
+|---|---:|---|
+| Sensitivity Baseline (single window) | 0.897 | uground |
+| Simulation L1 | 0.835 | uground |
+| Simulation L3 | 0.439 | uground |
+| Simulation L5 | 0.113 | ui-tars |
+
+### Difficulty Trend (L1 -> L5)
+
+| Model | L1 | L2 | L3 | L4 | L5 |
+|---|---:|---:|---:|---:|---:|
+| infigui | 0.771 | 0.616 | 0.438 | 0.214 | 0.103 |
+| os-atlas | 0.509 | 0.373 | 0.267 | 0.113 | 0.050 |
+| seeclick | 0.207 | 0.091 | 0.040 | 0.018 | 0.010 |
+| uground | 0.835 | 0.631 | 0.439 | 0.204 | 0.071 |
+| ui-tars | 0.818 | 0.598 | 0.395 | 0.204 | 0.113 |
+
+## Visual Overview
+
+| Dataset Design | Difficulty Analysis |
+|---|---|
+| ![Distribution](assets/figure_distribution.png) | ![Difficulty](assets/difficulty_analysis.png) |
+
+| Controlled Analysis | Case Study |
+|---|---|
+| ![Controlled](assets/controlled_analysis.png) | ![Case Study](assets/case_study_viz.png) |
+
+![Performance Gap](assets/figure_gap.png)
 
 ## Quick Start
 
-### 1. Environment
+### Environment
 
 ```bash
 python -m venv .venv
@@ -49,36 +73,33 @@ pip install -U pip
 pip install torch transformers pillow tqdm pandas python-dotenv
 ```
 
-If you use API-based models, also install the matching SDK required by your adapter implementation.
+### Required Inputs
 
-### 2. Prepare Assets
+- metadata: sentence_sim.json
+- wallpaper: windows_background.jpg
+- GUI image root: windows/
 
-Expected key inputs (currently used by the scripts):
-- metadata json: sentence_sim.json
-- wallpaper image: windows_background.jpg
-- window image root: windows/
-
-### 3. Run Full Benchmark
+### Run End To End
 
 ```bash
 bash run_benchmark_complete.sh eval_outputs
 ```
 
-### 4. Skip Data Generation and Only Evaluate
+### Evaluate Only (skip generation)
 
 ```bash
 bash run_benchmark_complete.sh eval_outputs --skip-gen
 ```
 
-### 5. Evaluate Specific Models Only
+### Evaluate Selected Models
 
 ```bash
 bash run_benchmark_complete.sh eval_outputs --skip-gen "infigui seed ui-tars-api"
 ```
 
-## Reproducible Commands
+## Reproducibility
 
-### Generate Sensitivity Data Only
+### Generate Sensitivity Data
 
 ```bash
 python sensitivity_analysis/experiment_generator.py \
@@ -90,7 +111,7 @@ python sensitivity_analysis/experiment_generator.py \
   --experiments all
 ```
 
-### Generate Simulation Data by Difficulty
+### Generate Simulation Data (L1-L5)
 
 ```bash
 for d in L1 L2 L3 L4 L5; do
@@ -104,28 +125,35 @@ for d in L1 L2 L3 L4 L5; do
 done
 ```
 
-### Generate Evaluation Jobs
-
-```bash
-python eval/generate_commands.py --data_dir eval_outputs > run_eval_jobs.sh
-bash run_eval_jobs.sh
-```
-
-### Summarize Results
+### Summarize Benchmark
 
 ```bash
 python eval/summarize_benchmark.py --output_dir eval_outputs
 ```
 
-## Output Layout
+## Repository Layout
+
+```text
+.
+├── assets/                              # Homepage figures
+├── eval/                                # Evaluation and model adapters
+├── sensitivity_analysis/                # Controlled sensitivity experiments
+├── simulation/dataset_generator/        # Multi-window synthesis pipeline
+├── run_benchmark_complete.sh            # End-to-end benchmark entry
+└── eval_outputs/                        # Generated results and summaries
+```
+
+## Data And Outputs
 
 ```text
 eval_outputs/
+├── benchmark_summary.csv
+├── benchmark_pivot.csv
 ├── sensitivity/
-│   ├── occlusion/<condition>/
-│   ├── semantic/<condition>/
-│   ├── clutter/<condition>/
-│   └── baseline/single_window/
+│   ├── baseline/single_window/
+│   ├── occlusion/*
+│   ├── semantic/*
+│   └── clutter/*
 └── simulation/
     ├── L1/
     ├── L2/
@@ -134,29 +162,13 @@ eval_outputs/
     └── L5/
 ```
 
-Each condition/level directory contains generated samples and evaluation files such as:
-- test.json
-- eval_<model>.json
+## Privacy Checklist Before Open Source
 
-## Configuration Notes
-
-Current scripts include machine-local absolute paths in some places (for example model paths and project root). Before open-sourcing, replace them with one of:
-- environment variables
-- CLI arguments
-- a versioned config template (without secrets)
-
-## Privacy and De-identification Checklist
-
-Before pushing to GitHub:
 - remove all secrets from .env
-- avoid committing local absolute paths
-- avoid exposing private model endpoints or internal model IDs
-- exclude generated artifacts and temporary outputs
+- replace machine-local absolute paths with env vars or config files
+- avoid exposing private endpoint names or internal model identifiers
+- keep generated artifacts and temporary files out of version control
 
 ## License
 
-Add your license here (for example MIT or Apache-2.0).
-
-## Citation
-
-If this benchmark supports a paper or report, add citation info here.
+Please add your project license (for example MIT or Apache-2.0).
