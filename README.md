@@ -31,15 +31,6 @@ It includes:
 
 Source: eval_outputs/benchmark_pivot.csv
 
-### Key Numbers
-
-| Setting | Best Accuracy | Best Model |
-|---|---:|---|
-| Sensitivity Baseline (single window) | 0.897 | uground |
-| Simulation L1 | 0.835 | uground |
-| Simulation L3 | 0.439 | uground |
-| Simulation L5 | 0.113 | ui-tars |
-
 ### Difficulty Trend (L1 -> L5)
 
 | Model | L1 | L2 | L3 | L4 | L5 |
@@ -52,15 +43,27 @@ Source: eval_outputs/benchmark_pivot.csv
 
 ## Visual Overview
 
-| Dataset Design | Difficulty Analysis |
-|---|---|
-| ![Distribution](assets/figure_distribution.png) | ![Difficulty](assets/difficulty_analysis.png) |
+This section follows the same logic as the benchmark workflow: data design -> difficulty behavior -> controlled diagnosis -> qualitative case study.
 
-| Controlled Analysis | Case Study |
-|---|---|
-| ![Controlled](assets/controlled_analysis.png) | ![Case Study](assets/case_study_viz.png) |
+### 1) Dataset Design And Generation Pipeline
 
-![Performance Gap](assets/figure_gap.png)
+| Pipeline | Distribution |
+|---|---|
+| ![Pipeline](assets/figure_pipeline.png) | ![Distribution](assets/figure_distribution.png) |
+
+### 2) Difficulty-Level Behavior
+
+![Difficulty](assets/difficulty_analysis.png)
+
+### 3) Controlled Diagnostic Analysis
+
+| Controlled Analysis | Performance Gap |
+|---|---|
+| ![Controlled](assets/controlled_analysis.png) | ![Performance Gap](assets/figure_gap.png) |
+
+### 4) Qualitative Case Study
+
+![Case Study](assets/case_study_viz.png)
 
 ## Quick Start
 
