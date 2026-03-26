@@ -1,6 +1,6 @@
 <div align="center">
 
-# MultiWindows: GUI Grounding Benchmark in Multi-Window Scenes
+# WinDeskGround: A Benchmark for Robust GUI Grounding in Complex Multi-Window Desktop Environments
 
 <p>
 Controlled data generation, difficulty-level simulation, and unified evaluation for desktop GUI grounding.
@@ -19,13 +19,12 @@ Controlled data generation, difficulty-level simulation, and unified evaluation 
 
 ## Overview
 
-MultiWindows is a reproducible benchmark toolkit for evaluating GUI grounding models in realistic multi-window desktop environments.
+WinDeskGround is a reproducible benchmark toolkit for evaluating GUI grounding models in realistic multi-window desktop environments.
 
 It includes:
 - sensitivity-controlled experiments for occlusion, semantic distraction, and clutter
 - simulation difficulty levels from L1 to L5
 - unified evaluation scripts for multiple local or API-based models
-- automatic summary tables for cross-model comparison
 
 ## Dataset And Benchmark Analysis
 
