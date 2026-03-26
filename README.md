@@ -8,14 +8,14 @@ Controlled data generation, difficulty-level simulation, and unified evaluation 
 
 <p>
   <a href="#quick-start">Quick Start</a> •
-  <a href="#benchmark-at-a-glance">Results</a> •
-  <a href="#visual-overview">Visual Overview</a> •
+  <a href="#dataset-and-benchmark-analysis">Results</a> •
+  <a href="#dataset-and-benchmark-analysis">Analysis</a> •
   <a href="#reproducibility">Reproducibility</a>
 </p>
 
 </div>
 
-![Pipeline](assets/figure_pipeline.png)
+![Performance Gap](assets/figure_gap.png)
 
 ## Overview
 
@@ -27,43 +27,69 @@ It includes:
 - unified evaluation scripts for multiple local or API-based models
 - automatic summary tables for cross-model comparison
 
-## Benchmark At A Glance
+## Dataset And Benchmark Analysis
+
+### 1) Dataset Construction Pipeline
+
+![Pipeline](assets/figure_pipeline.png)
+
+### 2) Dataset Distribution (Data Composition)
+
+
+#### Dataset Distribution
+
+| Category | Images | Samples |
+|---|---:|---:|
+| File&System_Utilitiess | 139 | 381 |
+| Productivity | 143 | 255 |
+| Communication | 77 | 218 |
+| Browsers | 59 | 132 |
+| Media&Entertainment | 56 | 118 |
+| Developer_Tools | 47 | 108 |
+| Gaming | 27 | 73 |
+| Utilities | 24 | 50 |
+| Advanced_Tools | 13 | 21 |
+| Total | 585 | 1356 |
+
+![Distribution](assets/figure_distribution.png)
+
+#### Domain Example Apps
+
+| Domain | ExampleApps |
+|---|---|
+| Productivity | Word, Notepad, Excel |
+| Browsers | GoogleChrome, Edge |
+| Communication | Discord, Zoom, WeChat |
+| Media&Entertainment | Spotify, Netflix |
+| Utilities | 7-Zip, CCleaner |
+| DeveloperTools | VSCode, DockerDesktop |
+| File&System | Settings, FileExplorer |
+| Gaming | Solitaire, XboxApp |
+| AdvancedTools | PowerShell, ResourceMonitor |
+
+### 3) Benchmark Result Analysis
 
 Source: eval_outputs/benchmark_pivot.csv
 
-### Difficulty Trend (L1 -> L5)
-
-| Model | L1 | L2 | L3 | L4 | L5 |
-|---|---:|---:|---:|---:|---:|
-| infigui | 0.771 | 0.616 | 0.438 | 0.214 | 0.103 |
-| os-atlas | 0.509 | 0.373 | 0.267 | 0.113 | 0.050 |
-| seeclick | 0.207 | 0.091 | 0.040 | 0.018 | 0.010 |
-| uground | 0.835 | 0.631 | 0.439 | 0.204 | 0.071 |
-| ui-tars | 0.818 | 0.598 | 0.395 | 0.204 | 0.113 |
-
-## Visual Overview
-
-This section follows the same logic as the benchmark workflow: data design -> difficulty behavior -> controlled diagnosis -> qualitative case study.
-
-### 1) Dataset Design And Generation Pipeline
-
-| Pipeline | Distribution |
-|---|---|
-| ![Pipeline](assets/figure_pipeline.png) | ![Distribution](assets/figure_distribution.png) |
-
-### 2) Difficulty-Level Behavior
+#### 3.1 Difficulty Analysis
 
 ![Difficulty](assets/difficulty_analysis.png)
 
-### 3) Controlled Diagnostic Analysis
+#### 3.2 Controlled Analysis
 
-| Controlled Analysis | Performance Gap |
-|---|---|
-| ![Controlled](assets/controlled_analysis.png) | ![Performance Gap](assets/figure_gap.png) |
+![Controlled](assets/controlled_analysis.png)
 
-### 4) Qualitative Case Study
+### 4) Dataset Case Studies
 
-![Case Study](assets/case_study_viz.png)
+The visualizations below show representative samples from the dataset.
+
+#### Case 1
+
+![Case 1](assets/case1.jpg)
+
+#### Case 2
+
+![Case 2](assets/case2.jpg)
 
 ## Quick Start
 
