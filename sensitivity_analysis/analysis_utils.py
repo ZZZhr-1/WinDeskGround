@@ -53,14 +53,6 @@ def load_experiment_results(experiment_dir, prediction_file):
             meta = json.load(f)
             
         gt_bbox = meta.get('gt_bbox') # [x1, y1, x2, y2] format in JSON usually? 
-        # Wait, generator saves as tuple(map(int, target_bbox_proj)) which is x1,y1,x2,y2
-        # But calculate_iou expects x,y,w,h? 
-        # Let's check generator.py: project_bbox returns x1,y1,x2,y2.
-        # So gt_bbox is x1,y1,x2,y2.
-        
-        # Convert GT to x,y,w,h for IoU function if needed, or adjust IoU function.
-        # Let's adjust IoU function to handle x1,y1,x2,y2 if that's what we have.
-        # Actually, let's standardize.
         
         if gt_bbox:
             gt_x1, gt_y1, gt_x2, gt_y2 = gt_bbox

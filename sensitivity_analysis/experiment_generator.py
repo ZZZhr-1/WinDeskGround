@@ -52,14 +52,6 @@ def run_experiment(experiment_name, conditions, args, metadata, wallpaper, evalu
         cond_dir = base_out_dir / condition_name
         cond_dir.mkdir(exist_ok=True)
         
-        # If we want per-condition evaluation, we need to handle it here.
-        # But BatchEvaluator is designed for batch processing across the whole experiment.
-        # To get per-condition stats, we can either:
-        # 1. Instantiate a new evaluator (or reset it) for each condition.
-        # 2. Filter the final results by condition name.
-        
-        # Let's try option 1: Reset evaluator for each condition to get granular stats.
-        # But we need to save the results to the condition folder.
         if evaluator:
              # Flush any previous data
             if evaluator.buffer:
