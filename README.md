@@ -11,6 +11,8 @@ Controlled data generation, difficulty-level simulation, and unified evaluation 
   <a href="#dataset-and-benchmark-analysis">Results</a> •
   <a href="#dataset-and-benchmark-analysis">Analysis</a> •
   <a href="#reproducibility">Reproducibility</a>
+  <a href="https://huggingface.co/datasets/Zbao/WinDeskGround">WinDeskGround</a>
+  <a href="https://huggingface.co/datasets/Zbao/WinDeskGround_windows">WinDeskGround_windows</a>
 </p>
 
 </div>
@@ -27,6 +29,12 @@ It includes:
 - unified evaluation scripts for multiple local or API-based models
 
 ## Dataset And Benchmark Analysis
+
+### 0) Datasets
+
+[WinDeskGround](https://huggingface.co/datasets/Zbao/WinDeskGround) is a dataset we constructed.
+
+[WinDeskGround_windows](https://huggingface.co/datasets/Zbao/WinDeskGround_windows) refers to the original windows used for constructed.
 
 ### 1) Dataset Construction Pipeline
 
