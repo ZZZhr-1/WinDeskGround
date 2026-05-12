@@ -10,8 +10,8 @@ Controlled data generation, difficulty-level simulation, and unified evaluation 
   <a href="#quick-start">Quick Start</a> •
   <a href="#dataset-and-benchmark-analysis">Results</a> •
   <a href="#dataset-and-benchmark-analysis">Analysis</a> •
-  <a href="#reproducibility">Reproducibility</a>
-  <a href="https://huggingface.co/datasets/Zbao/WinDeskGround">WinDeskGround</a>
+  <a href="#reproducibility">Reproducibility</a> •
+  <a href="https://huggingface.co/datasets/Zbao/WinDeskGround">WinDeskGround</a> •
   <a href="https://huggingface.co/datasets/Zbao/WinDeskGround_windows">WinDeskGround_windows</a>
 </p>
 
