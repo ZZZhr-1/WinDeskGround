@@ -33,18 +33,12 @@ def evaluate_dataset(model, data_path, image_root, output_path):
     for item in tqdm(data, desc=f"Evaluating {os.path.basename(data_path)}"):
         try:
             filename = item.get("img_filename") or item.get("image_path")
-            # Cleaning filename if necessary (it might be absolute path in simulation)
             if os.path.isabs(filename) and image_root not in filename:
-                 # If absolute but not in image_root? Should not happen if generated correctly.
                  img_path = filename
             else:
                  img_path = os.path.join(image_root, os.path.basename(filename))
             
             if not os.path.exists(img_path):
-                # Fallback: check if filename is relative path inside image_root subdirs
-                # But for synthetic data, it's usually flat in output dir
-                # If we passed the experiment output dir as image_root, it should be fine.
-                # Actually, generator saves absolute path in 'image_path'.
                 if os.path.exists(item.get("image_path")):
                     img_path = item.get("image_path")
                 else: 
@@ -53,12 +47,6 @@ def evaluate_dataset(model, data_path, image_root, output_path):
 
             instruction = item.get("instruction")
             if not instruction: continue
-
-            # Get GT bbox
-            # In simulation output (generator.py):
-            # 'gt_bbox' is in raw absolute pixels [x1, y1, x2, y2]
-            # 'bbox' is in COCO format [x, y, w, h] absolute pixels
-            # We unify to normalized [x1, y1, x2, y2] (0-1)
             
             gt_bbox_raw = item.get("bbox") # [x, y, w, h] from generator.py
             if not gt_bbox_raw and "gt_bbox" in item:

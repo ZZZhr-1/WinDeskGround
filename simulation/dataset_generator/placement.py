@@ -11,8 +11,11 @@ def sample_size(window_entry, scale_preference='medium'):
         return (1280,720)
     return s
 
-def sample_position(category, w, h, center_bias=False):
-    if center_bias:
+def sample_position(category, w, h, center_bias=False, use_position_prior=True):
+    if not use_position_prior:
+        # Ablation mode: remove all spatial priors and sample from full screen.
+        px1, px2, py1, py2 = (0.0, 1.0, 0.0, 1.0)
+    elif center_bias:
         # Bias towards center
         px1, px2, py1, py2 = (0.15, 0.85, 0.15, 0.85)
     else:
@@ -38,8 +41,6 @@ def sample_position(category, w, h, center_bias=False):
     return x, y
 
 def assign_z_order(windows):
-    # Sort by current z if exists, else shuffle
-    # This function normalizes Z values to 0..N-1
     if all('z' in w for w in windows):
         windows.sort(key=lambda x: x['z'])
     else:
@@ -54,8 +55,6 @@ def place_occluder(target_bbox, occluder_size, screen_w, screen_h):
     tx1, ty1, tx2, ty2 = target_bbox
     ow, oh = occluder_size
     
-    # We want the occluder to overlap with target_bbox
-    # Pick a point inside the target bbox that MUST be covered
     p_x = random.uniform(tx1, tx2)
     p_y = random.uniform(ty1, ty2)
     

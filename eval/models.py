@@ -293,9 +293,6 @@ Locate the UI element(s) for "{instruction}", output the coordinates using JSON 
             }
         ]
         
-        # Note: apply_chat_template expects list of messages for conversation
-        # Depending on transformer version it might handle single conversation list or list of lists
-        # User snippet used [messages] implying batch of 1 conversation.
         
         text = self.processor.apply_chat_template([messages], tokenize=False, add_generation_prompt=True)
         image_inputs, video_inputs = process_vision_info([messages])
@@ -579,8 +576,6 @@ click {instruction}"""
         # UI-TARS output parsing
         pred_point = None
         
-        # 0. New UI-TARS format: point='<|box_start|>(x,y)<|box_end|>' OR start_box='<|box_start|>(x,y)<|box_end|>'
-        # Example from user: Action: click(start_box='<|box_start|>(783,344)<|box_end|>')
         special_point_match = re.search(r"(?:point|start_box)=['\"]<\|box_start\|>\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)\s*<\|box_end\|>['\"]", output_text)
         if special_point_match:
              pred_x, pred_y = float(special_point_match.group(1)), float(special_point_match.group(2))
@@ -588,26 +583,21 @@ click {instruction}"""
              # NOTE: smart_resize logic is strictly adhered to for W, H
              pred_point = [pred_x / new_width, pred_y / new_height]
 
-        # 0.5 Try start_box='(x,y)' format per user feedback (legacy or alternative)
-        # Handle case without special tokens if they are stripped or missing
+
         if not pred_point:
             box_match = re.search(r"start_box='\s*\(\s*(\d+),\s*(\d+)\s*\)\s*'", output_text)
             if box_match:
                 pred_x, pred_y = float(box_match.group(1)), float(box_match.group(2))
                 pred_point = [pred_x / new_width, pred_y / new_height]
         
-        # 1. Try parsing specific <point> tag from UI-TARS prompt instruction (Assuming normalized if < 1, else absolute)
-        # But UI-TARS v1.5 usually outputs relative 0-1000 or absolute pixels? 
-        # Actually based on above, it seems it outputs ABSOLUTE PIXELS on resized image.
+
         if not pred_point:
-            # Expected format: Action: click(point='<point>336 672</point>')
-            # Regex to capture x and y which can be int or float, separated by space
+
             point_match = re.search(r"<point>\s*(-?[\d\.]+)\s+(-?[\d\.]+)\s*</point>", output_text)
             if point_match:
                 try:
                     x, y = float(point_match.group(1)), float(point_match.group(2))
-                    # Logic update: If it looks like absolute pixels (e.g. > 1), divide by new_width/height.
-                    # If it looks like normalized 0-1, keep it.
+
                     if x > 1.0 or y > 1.0: 
                         pred_point = [x / new_width, y / new_height]
                     else:
@@ -620,12 +610,6 @@ click {instruction}"""
              try:
                 pred_bbox = extract_bbox(output_text)
                 if pred_bbox:
-                     # extract_bbox usually handles 0-1000 range (e.g. Qwen2-VL style)
-                     # For UI-TARS, check if it's absolute pixel box?
-                     # If the box numbers are big (>1000), treat as absolute.
-                     # But usually extract_bbox normalizes 0-1000 -> 0-1000.
-                     # Let's assume standard Qwen 0-1000 normalization for now unless clearly indicated otherwise.
-                     # Wait, user example showed absolute pixels in start_box.
                      pass 
                      pred_point = [(pred_bbox[0][0] + pred_bbox[1][0]) / 2000, (pred_bbox[0][1] + pred_bbox[1][1]) / 2000]
              except: pass

@@ -9,8 +9,6 @@ def edge_density(image):
     return float((arr>30).mean())
 
 def add_clutter(desktop_image, density_level='low'):
-    # density_level: low, mild, medium, high, extreme
-    # Simulate icons or widgets
     
     draw = ImageDraw.Draw(desktop_image)
     w, h = desktop_image.size
@@ -21,9 +19,6 @@ def add_clutter(desktop_image, density_level='low'):
     elif density_level == 'medium': num_icons = 15
     elif density_level == 'high': num_icons = 30
     elif density_level == 'extreme': num_icons = 50
-    
-    # Place "icons" (random colored rectangles)
-    # Usually icons are on the left or top-right
     
     for _ in range(num_icons):
         icon_w, icon_h = 48, 48

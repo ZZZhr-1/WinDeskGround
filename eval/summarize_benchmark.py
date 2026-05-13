@@ -90,7 +90,7 @@ def summarize_benchmark(output_dir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--output_dir', default='../eval_outputs', help='Root directory of eval outputs')
+    parser.add_argument('--output_dir', default='../eval_outputs_sim_only_wo_pre', help='Root directory of eval outputs')
     args = parser.parse_args()
     
     summarize_benchmark(args.output_dir)

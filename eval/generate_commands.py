@@ -60,8 +60,8 @@ if __name__ == "__main__":
         "uground":  {"type": "uground", "path": "/data/home/zhr/models/UGround-V1-7B"},
         "ui-tars":  {"type": "ui-tars", "path": "/data/home/zhr/models/UI-TARS-1.5-7B"},
         "infigui":  {"type": "infigui", "path": "/data/home/zhr/models/InfiGUI-G1-7B"},
-        "seed":     {"type": "seed", "path": "doubao-seed-1-6-vision-250815"},
-        "ui-tars-api": {"type": "ui-tars-api", "path": "doubao-1-5-ui-tars-250428"}
+        # "seed":     {"type": "seed", "path": "doubao-seed-1-6-vision-250815"},
+        # "ui-tars-api": {"type": "ui-tars-api", "path": "doubao-1-5-ui-tars-250428"}
     }
     
     parser = argparse.ArgumentParser()

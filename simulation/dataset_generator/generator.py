@@ -11,7 +11,7 @@ from sampler import sample_windows
 from debug_visualizer import draw_debug_info
 from config import SCREEN_W, SCREEN_H, DIFFICULTY_LEVELS
 
-def generate_one_sample(metadata, wallpaper, difficulty='L3', image_root=None, path_to_meta=None, config_override=None, target_index=None):
+def generate_one_sample(metadata, wallpaper, difficulty='L3', image_root=None, path_to_meta=None, config_override=None, target_index=None, no_position_prior=False):
     if config_override:
         conf = config_override
     else:
@@ -31,11 +31,7 @@ def generate_one_sample(metadata, wallpaper, difficulty='L3', image_root=None, p
 
         # Load image first to get natural size (avoid stretching)
         try:
-            # Load the original image as specified in metadata
-            # We MUST use the exact image path from metadata because gt_bbox is tied to that specific layout.
             img = load_window_image(win['image_path'], root=image_root)
-            
-            # No resizing is performed here, relies on native resolution or loader handling.
                 
             w, h = img.size
         except Exception as e:
@@ -47,7 +43,13 @@ def generate_one_sample(metadata, wallpaper, difficulty='L3', image_root=None, p
         # Center bias for easier levels
         center_bias = (difficulty in ['L1', 'L2'] and is_target)
         
-        x, y = sample_position(win['type'], w, h, center_bias=center_bias)
+        x, y = sample_position(
+            win['type'],
+            w,
+            h,
+            center_bias=center_bias,
+            use_position_prior=(not no_position_prior)
+        )
             
         windows.append({
             'meta': win, 
@@ -191,7 +193,12 @@ def generate_one_sample(metadata, wallpaper, difficulty='L3', image_root=None, p
                         if overlap_ratio > 0.20:
                             # Try to resample position
                             for _ in range(15):
-                                new_dx, new_dy = sample_position(w['meta'].get('type',''), dw, dh)
+                                new_dx, new_dy = sample_position(
+                                    w['meta'].get('type',''),
+                                    dw,
+                                    dh,
+                                    use_position_prior=(not no_position_prior)
+                                )
                                 
                                 # Check new overlap
                                 n_ex1 = new_dx + rel_bbox[0] * dw
@@ -282,7 +289,7 @@ def save_sample(idx, out_dir, img, debug_img, windows, clutter):
         json.dump(rec, f, indent=2)
     return str(img_path), str(debug_path), str(meta_path), rec
 
-def generate_dataset(metadata_path, wallpaper_path, out_dir, n, difficulty='L3', seed=None, image_root=None, evaluator=None, traverse=False):
+def generate_dataset(metadata_path, wallpaper_path, out_dir, n, difficulty='L3', seed=None, image_root=None, evaluator=None, traverse=False, no_position_prior=False):
     if seed is not None:
         random.seed(seed)
     metadata = load_metadata(metadata_path)
@@ -311,7 +318,8 @@ def generate_dataset(metadata_path, wallpaper_path, out_dir, n, difficulty='L3',
             difficulty, 
             image_root=image_root, 
             path_to_meta=path_to_meta,
-            target_index=target_idx
+            target_index=target_idx,
+            no_position_prior=no_position_prior
         )
         img_path, debug_path, meta_path, rec = save_sample(i, out_dir, img, debug, windows, cg)
         
